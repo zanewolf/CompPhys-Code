@@ -1,0 +1,513 @@
+import java.util.Scanner;
+import java.util.Arrays;
+public class battlefield {
+
+	public static void main(String []args) {
+
+		Scanner in = new Scanner(System.in);
+		System.out.print("User 1: What is your name? ");
+		String userName1 = in.nextLine();
+
+		Scanner in2 = new Scanner(System.in);
+		System.out.print("User2: What is your name? ");
+		String userName2 = in.nextLine();
+
+	String[][]user1field = new String [10][10];
+
+	for (int x=0; x<10; x++){
+	 user1field[x][0] = ",";
+	 user1field[x][1] = ",";
+	 user1field[x][2] = ",";
+	 user1field[x][3] = ",";
+	 user1field[x][4] = ",";
+	 user1field[x][5] = ",";
+	 user1field[x][6] = ",";
+	 user1field[x][7] = ",";
+	 user1field[x][8] = ",";
+	 user1field[x][9] = ",";
+	}
+		System.out.println(userName1 + "'s Board");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	
+	String[][]user1Map = new String [10][10];
+
+	for (int x=0; x<10; x++){
+	 user1Map[x][0] = ",";
+	 user1Map[x][1] = ",";
+	 user1Map[x][2] = ",";
+	 user1Map[x][3] = ",";
+	 user1Map[x][4] = ",";
+	 user1Map[x][5] = ",";
+	 user1Map[x][6] = ",";
+	 user1Map[x][7] = ",";
+	 user1Map[x][8] = ",";
+	 user1Map[x][9] = ",";
+	}
+		System.out.println(userName1 + "'s Map");
+		for (String[] array : user1Map) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	
+	String[][]user2field = new String [10][10];
+
+	for (int x=0; x<10; x++){
+	 user2field[x][0] = ",";
+	 user2field[x][1] = ",";
+	 user2field[x][2] = ",";
+	 user2field[x][3] = ",";
+	 user2field[x][4] = ",";
+	 user2field[x][5] = ",";
+	 user2field[x][6] = ",";
+	 user2field[x][7] = ",";
+	 user2field[x][8] = ",";
+	 user2field[x][9] = ",";
+	}
+		System.out.println(userName2 + "'s Board");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+String[][]user2Map = new String [10][10];
+
+	for (int x=0; x<10; x++){
+	 user2Map[x][0] = ",";
+	 user2Map[x][1] = ",";
+	 user2Map[x][2] = ",";
+	 user2Map[x][3] = ",";
+	 user2Map[x][4] = ",";
+	 user2Map[x][5] = ",";
+	 user2Map[x][6] = ",";
+	 user2Map[x][7] = ",";
+	 user2Map[x][8] = ",";
+	 user2Map[x][9] = ",";
+	}
+		System.out.println(userName2 + "'s Map");
+		for (String[] array : user2Map) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+
+// begin put ships on water
+
+		Scanner boatfive1 = new Scanner(System.in);
+		System.out.print(userName1 + ", which row would you like to place boat 5 (length 5)?");
+		int boatfiveRow = boatfive1.nextInt();
+
+		Scanner boatfive2 = new Scanner(System.in);
+		System.out.print(userName1 + ", which column would you like to place boat 5? ");
+		int boatfiveCol = boatfive2.nextInt();
+ 		
+ 		Scanner boatfive3 = new Scanner(System.in);
+		System.out.print(userName1 + ", should the boat be horizontal(h) or vertical(v)? (Vertically down from the given start position and Horizontally right of the start position.)");
+		String boatfive = boatfive3.nextLine();
+
+		user1field[boatfiveRow-1][boatfiveCol-1]= "5"; 
+		if (boatfive.charAt(0) == ('v')){
+			user1field[boatfiveRow][boatfiveCol-1]= "5";
+			user1field[boatfiveRow+1][boatfiveCol-1]= "5";
+			user1field[boatfiveRow+2][boatfiveCol-1]= "5";
+			user1field[boatfiveRow+3][boatfiveCol-1]= "5";
+		}	
+
+		if (boatfive.charAt(0) ==('h')){
+			user1field[boatfiveRow-1][boatfiveCol]= "5";
+			user1field[boatfiveRow-1][boatfiveCol+1]= "5";
+			user1field[boatfiveRow-1][boatfiveCol+2]= "5";
+			user1field[boatfiveRow-1][boatfiveCol+3]= "5";
+		}	
+
+
+		System.out.println(userName1+ "'s Field");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+	}
+	int var = 1;
+	while (var <= 2) {
+		Scanner boatfour1 = new Scanner(System.in);
+		System.out.print(userName1 + ", which row would you like to place boat 4 (length 4)?");
+		int boatfourRow = boatfour1.nextInt();
+
+		Scanner boatfour2 = new Scanner(System.in);
+		System.out.print(userName1 + ", which column would you like to place boat 4? ");
+		int boatfourCol = boatfour2.nextInt();
+ 		
+ 		Scanner boatfour3 = new Scanner(System.in);
+		System.out.print(userName1 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boatfour = boatfour3.nextLine();
+
+		user1field[boatfourRow-1][boatfourCol-1]= "4"; 
+		if (boatfour.charAt(0) == ('v')){
+			user1field[boatfourRow][boatfourCol-1]= "4";
+			user1field[boatfourRow+1][boatfourCol-1]= "4";
+			user1field[boatfourRow+2][boatfourCol-1]= "4";
+		}	
+
+		if (boatfour.charAt(0) ==('h')){
+			user1field[boatfourRow-1][boatfourCol]= "4";
+			user1field[boatfourRow-1][boatfourCol+1]= "4";
+			user1field[boatfourRow-1][boatfourCol+2]= "4";
+		}	
+		var = var + 1;
+		System.out.println(userName1+ "'s Field");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	}
+
+
+	int vara = 1;
+	while (vara <= 3) {
+		Scanner boatthree1 = new Scanner(System.in); 
+		System.out.print(userName1 + ", which row would you like to place boat 3 (length 3)? ");
+		int boatthreeRow = boatthree1.nextInt();
+
+		Scanner boatthree2 = new Scanner(System.in);
+		System.out.print(userName1 + ", which column would you like to place boat 3? ");
+		int boatthreeCol = boatthree2.nextInt();
+ 		
+ 		Scanner boatthree3 = new Scanner(System.in);
+		System.out.print(userName1 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boatthree = boatthree3.nextLine();
+
+		user1field[boatthreeRow-1][boatthreeCol-1]= "3"; 
+		if (boatthree.charAt(0) == ('v')){
+			user1field[boatthreeRow][boatthreeCol-1]= "3";
+			user1field[boatthreeRow+1][boatthreeCol-1]= "3";
+		}	
+
+		if (boatthree.charAt(0) ==('h')){
+			user1field[boatthreeRow-1][boatthreeCol]= "3";
+			user1field[boatthreeRow-1][boatthreeCol+1]= "3";
+		}	
+		vara = vara + 1;
+		System.out.println(userName1+ "'s Field");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	}
+	
+	int varb = 1;
+	while (varb <= 4) {
+		Scanner boattwo1 = new Scanner(System.in);
+		System.out.print(userName1 + ", which row would you like to place boat 2 (length 2)?");
+		int boattwoRow = boattwo1.nextInt();
+
+		Scanner boattwo2 = new Scanner(System.in);
+		System.out.print(userName1 + ", which column would you like to place boat 2? ");
+		int boattwoCol = boattwo2.nextInt();
+ 		
+ 		Scanner boattwo3 = new Scanner(System.in);
+		System.out.print(userName1 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boattwo = boattwo3.nextLine();
+
+		user1field[boattwoRow-1][boattwoCol-1]= "2"; 
+		if (boattwo.charAt(0) == ('v')){
+			user1field[boattwoRow][boattwoCol-1]= "2";
+	
+		}	
+
+		if (boattwo.charAt(0) ==('h')){
+			user1field[boattwoRow-1][boattwoCol]= "2";
+			
+		}	
+		varb = varb + 1;
+		System.out.println(userName1+ "'s Field");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+//begin filling in user2's ships
+	
+	}
+			Scanner boatfive21 = new Scanner(System.in);
+		System.out.print(userName2 + ", which row would you like to place boat 5 (length 5)?");
+		int boatfive2Row = boatfive21.nextInt();
+
+		Scanner boatfive22 = new Scanner(System.in);
+		System.out.print(userName2 + ", which column would you like to place boat 5? ");
+		int boatfive2Col = boatfive22.nextInt();
+ 		
+ 		Scanner boatfive23 = new Scanner(System.in);
+		System.out.print(userName2 + ", should the boat be horizontal(h) or vertical(v)? (Vertically down from the given start position and Horizontally right of the start position.)");
+		String boatfivetwo2 = boatfive23.nextLine();
+
+		user2field[boatfive2Row-1][boatfive2Col-1]= "5"; 
+		if (boatfivetwo2.charAt(0) == ('v')){
+			user2field[boatfive2Row][boatfive2Col-1]= "5";
+			user2field[boatfive2Row+1][boatfive2Col-1]= "5";
+			user2field[boatfive2Row+2][boatfive2Col-1]= "5";
+			user2field[boatfive2Row+3][boatfive2Col-1]= "5";
+		}	
+
+		if (boatfivetwo2.charAt(0) ==('h')){
+			user2field[boatfive2Row-1][boatfive2Col]= "5";
+			user2field[boatfive2Row-1][boatfive2Col+1]= "5";
+			user2field[boatfive2Row-1][boatfive2Col+2]= "5";
+			user2field[boatfive2Row-1][boatfive2Col+3]= "5";
+		}	
+
+
+		System.out.println(userName2+ "'s Field");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+	}
+	int var2 = 1;
+	while (var2 <= 2) {
+		Scanner boatfour21 = new Scanner(System.in);
+		System.out.print(userName2 + ", which row would you like to place boat 4 (length 4)?");
+		int boatfour2Row = boatfour21.nextInt();
+
+		Scanner boatfour22 = new Scanner(System.in);
+		System.out.print(userName2 + ", which column would you like to place boat 4? ");
+		int boatfour2Col = boatfour22.nextInt();
+ 		
+ 		Scanner boatfour23 = new Scanner(System.in);
+		System.out.print(userName2 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boatfour2 = boatfour23.nextLine();
+
+		user2field[boatfour2Row-1][boatfour2Col-1]= "4"; 
+		if (boatfour2.charAt(0) == ('v')){
+			user2field[boatfour2Row][boatfour2Col-1]= "4";
+			user2field[boatfour2Row+1][boatfour2Col-1]= "4";
+			user2field[boatfour2Row+2][boatfour2Col-1]= "4";
+		}	
+
+		if (boatfour2.charAt(0) ==('h')){
+			user2field[boatfour2Row-1][boatfour2Col]= "4";
+			user2field[boatfour2Row-1][boatfour2Col+1]= "4";
+			user2field[boatfour2Row-1][boatfour2Col+2]= "4";
+		}	
+		var2 = var2 + 1;
+		System.out.println(userName2+ "'s Field");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	}
+
+
+	int vara2 = 1;
+	while (vara2 <= 3) {
+		Scanner boatthree21 = new Scanner(System.in); 
+		System.out.print(userName2 + ", which row would you like to place boat 3 (length 3)? ");
+		int boatthree2Row = boatthree21.nextInt();
+
+		Scanner boatthree22 = new Scanner(System.in);
+		System.out.print(userName2 + ", which column would you like to place boat 3? ");
+		int boatthree2Col = boatthree22.nextInt();
+ 		
+ 		Scanner boatthree23 = new Scanner(System.in);
+		System.out.print(userName2 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boatthree2 = boatthree23.nextLine();
+
+		user2field[boatthree2Row-1][boatthree2Col-1]= "3"; 
+		if (boatthree2.charAt(0) == ('v')){
+			user2field[boatthree2Row][boatthree2Col-1]= "3";
+			user2field[boatthree2Row+1][boatthree2Col-1]= "3";
+		}	
+
+		if (boatthree2.charAt(0) ==('h')){
+			user2field[boatthree2Row-1][boatthree2Col]= "3";
+			user2field[boatthree2Row-1][boatthree2Col+1]= "3";
+		}	
+		vara2 = vara2 + 1;
+		System.out.println(userName2+ "'s Field");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	}
+	
+	int varb2 = 1;
+	while (varb2 <= 4) {
+		Scanner boattwo21 = new Scanner(System.in);
+		System.out.print(userName2 + ", which row would you like to place boat 2 (length 2)?");
+		int boattwo2Row = boattwo21.nextInt();
+
+		Scanner boattwo22 = new Scanner(System.in);
+		System.out.print(userName2 + ", which column would you like to place boat 2? ");
+		int boattwo2Col = boattwo22.nextInt();
+ 		
+ 		Scanner boattwo23 = new Scanner(System.in);
+		System.out.print(userName2 + ", should the boat be horizontal(h) or vertical(v)? ");
+		String boattwo2 = boattwo23.nextLine();
+
+		user2field[boattwo2Row-1][boattwo2Col-1]= "2"; 
+		if (boattwo2.charAt(0) == ('v')){
+			user2field[boattwo2Row][boattwo2Col-1]= "2";
+	
+		}	
+
+		if (boattwo2.charAt(0) ==('h')){
+			user2field[boattwo2Row-1][boattwo2Col]= "2";
+			
+		}	
+		varb2 = varb2 + 1;
+		System.out.println(userName2+ "'s Field");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+		System.out.println();
+		}
+	
+	}
+//begin PLAY
+
+int MasterX=0;
+while (MasterX<=200){
+	MasterX = MasterX + 1;
+	Scanner player = new Scanner(System.in);
+	System.out.print("Whose turn is it?");
+	String player1 = player.nextLine();
+
+	if (player1.equals(userName1)) {
+		System.out.println(userName1+ "'s Field");
+		for (String[] array : user1field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+			System.out.println();
+		}
+		System.out.println(userName1+ "'s Map");
+		for (String[] array : user1Map) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+			System.out.println();
+		}
+		Scanner player1Aim1 = new Scanner(System.in); 
+		System.out.print(userName1 + ", which row would you like to hit? ");
+		int player1Row = player1Aim1.nextInt();
+
+		Scanner player1Aim2 = new Scanner(System.in); 
+		System.out.print(userName1 + ", which column would you like to hit? ");
+		int player1Col = player1Aim2.nextInt();
+
+		player1Row=player1Row -1;
+		player1Col=player1Col -1;
+
+		if (user2field[player1Row][player1Col] == "5" || user2field[player1Row][player1Col] == "4" || user2field[player1Row][player1Col] == "3" || user2field[player1Row][player1Col] == "2") {
+			//if hit, change user2(x,y) to 'X' and user1Map to "x"
+			user2field[player1Row][player1Col] = "X";
+			user1Map[player1Row][player1Col] = "X";
+			System.out.println("HIT!");
+		} else {
+			user1Map[player1Row][player1Col] = "O";
+			System.out.println("MISS! :( ");
+		}
+		int counter = 0;
+		counter = 0;
+		for (int x = 0; x <= 9; x++){
+			for (int y = 0; y <= 9; y++){
+				if (user2field[x][y] == "5" || user2field[x][y] == "4" || user2field[x][y] == "3" || user2field[x][y] == "2") {
+					counter = counter + 1;
+				}
+			}
+		}
+		if (counter == 0) {
+			System.out.println(userName1 + " is the WINNER!!!");
+			MasterX = 201;
+		}
+
+
+
+	} else {
+		System.out.println(userName2+ "'s Field");
+		for (String[] array : user2field) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+			System.out.println();
+		}
+		System.out.println(userName2+ "'s Map");
+		for (String[] array : user2Map) {
+			for (String element : array) {
+				System.out.print(element);
+				System.out.print (" ");
+			}
+			System.out.println();
+		}
+		Scanner player2Aim1 = new Scanner(System.in); 
+		System.out.print(userName2 + ", which row would you like to hit? ");
+		int player2Row = player2Aim1.nextInt();
+
+		Scanner player2Aim2 = new Scanner(System.in); 
+		System.out.print(userName2 + ", which column would you like to hit? ");
+		int player2Col = player2Aim2.nextInt();
+
+		player2Row = player2Row -1;
+		player2Col = player2Col -1;
+
+		if (user1field[player2Row][player2Col] == "5" || user1field[player2Row][player2Col] == "4" || user1field[player2Row][player2Col] == "3" || user1field[player2Row][player2Col] == "2") {
+			//if hit, change user2(x,y) to 'X' and user1Map to "x"
+			user1field[player2Row][player2Col] = "X";
+			user2Map[player2Row][player2Col] = "X";
+			System.out.println("HIT!");
+		} else {
+			user2Map[player2Row][player2Col] = "O";
+			System.out.println("MISS! :( ");
+		}
+		
+		int counter2=0;
+		counter2 = 0;
+		for (int x = 0; x <= 9; x++){
+			for (int y = 0; y <= 9; y++){
+				if (user1field[x][y] == "5" || user1field[x][y] == "4" || user1field[x][y] == "3" || user1field[x][y] == "2") {
+					counter2=counter2+1;					
+				} 
+			}
+		}
+		if (counter2==0){
+			System.out.println(userName2 + "is the WINNER!!!");
+			MasterX = 201;
+		}
+	}
+}	
+}
+}
