@@ -1,0 +1,334 @@
+import java.applet.*;
+import java.awt.*;
+import java.math.*;
+import java.lang.*;
+import java.util.Random;
+import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
+
+/*      <applet code="candle" width=1000 height=500>
+         </applet>
+*/
+public class candle extends Applet implements Runnable {
+
+
+//Define stuff
+    Double Llength,Rlength,A;
+    double theta,dt;
+    double Apart1, Apart2, Apart3, Apart4, aNow1, aNow2;
+    double LBurnrate,RBurnrate;
+    double t,Vph,Vmh;
+    double thetaStarPH;
+    double thetaStarNext;
+    double VStarph;
+    double Vnow,Vnext;
+    double thetaprev;
+    double thetaNext;
+    double thetaPH;
+    double Vstar;
+    double g=9.81;
+    double pi = 4.0*Math.atan(1.0);
+    int Lx,Ly,Rx,Ry;
+    //***RK Variables
+    double k1, k2, k3, k4, l1, l2, l3, l4, tph, tnext,Vn,Vnp1,a1,a2,a3,a4;
+    double v1,v2,v3,v4,theta1,theta2,theta3,theta4,thetaN,thetanp1;
+
+    TextField newA,newLength;
+
+    Dimension size;                  // The size of the apple
+    Image buffer,Lflame,Rflame;                    // The off-screen image for double-buffering
+    Graphics2D big;
+    Graphics bufferGraphics;         // A Graphics object for the buffer
+    Thread animator;                 // Thread that performs the animation
+    Color background;
+    boolean please_stop; 
+  
+//***************************************************************INIT**************
+  public void init() {
+
+    //Drawing Magic
+    size = this.size();
+    buffer = this.createImage(size.width, size.height);
+    bufferGraphics = buffer.getGraphics();
+    background = new Color(255,255,255);
+
+    // //TextFields and Button Initiation  
+    // newA = new TextField("Burning Rate:0.01 ",15);
+    // newLength=new TextField("Candle Combined Length:200",25); 
+    // Button resetbutton= new Button("RESET");
+
+
+
+    //Initial Values
+    Llength=100.0;    
+    Rlength=100.0;
+
+    A=0.08; //random value for minimum Burn rate
+    //Leapfrog Variables
+    theta=pi/100;
+    //thetaNow=pi/50;
+    thetaprev=0.0;
+    Vnow=0.01;
+    Vmh=0.00;
+    //RungeKutta Variables
+    // Vn=0.0;
+    // thetaN=0.01;
+
+    Ry=(int) Math.round(Rlength*Math.sin(theta));
+    Rx=(int) Math.round(Rlength*Math.cos(theta));
+    Ly=(int) Math.round(Llength*Math.sin(theta+pi));
+    Lx=(int) Math.round(Llength*Math.cos(theta+pi));
+    dt=0.1;
+    t=0;
+
+    //image    
+    Lflame = getImage(getCodeBase(), "Leftflame.jpg" );
+    Rflame = getImage(getCodeBase(), "Rightflame.jpg");
+
+
+    //Button magic    
+  //   setBackground(background);
+  //   add(resetbutton);
+  //   add(newA);
+  //   add(newLength);
+  //   resetbutton.addActionListener(this); 
+  }
+
+  //***********************************************************PAINT***************
+  public void paint(Graphics g) {
+    Graphics2D g2 = (Graphics2D) g;
+    // Draw into the off-screen buffer.
+    bufferGraphics.setColor(background);
+    bufferGraphics.fillRect(0, 0, 3*size.width, 3*size.height); // clear the buffer
+    
+    bufferGraphics.drawImage(Rflame,300+Lx-40,250+Ly-40,45,45,this);//draw flames
+    bufferGraphics.drawImage(Lflame,300+Rx,250+Ry-40,45,45,this);
+
+
+    bufferGraphics.setColor(new Color(0,255,0)); //draws the "candles"
+    bufferGraphics.drawLine((int) 300+Lx,(int) 250+Ly,300,250);
+    bufferGraphics.setColor(new Color(255,0,0));
+    bufferGraphics.drawLine(300,250,(int)300+Rx,(int) 250+Ry);
+
+    bufferGraphics.setColor(new Color(0,0,255));//draws the pivot point
+    bufferGraphics.fillOval(295,245,10,10);
+
+    //draw phase spaces:
+
+    bufferGraphics.setColor(new Color(0,0,0)); //angle vs time
+    bufferGraphics.drawLine(625,225,900,225);
+    bufferGraphics.drawLine(625,75,625,225);
+    bufferGraphics.drawString("Time",900,150);
+    bufferGraphics.drawString("Abs(Theta)",625,75);
+    bufferGraphics.drawLine(620,155,630,155);
+    bufferGraphics.drawString("2pi",605,155);
+    // double thetaD=Math.toDegrees(theta);
+    // System.out.println("time "+t);
+    double thetaAbs=Math.abs(theta);
+    bufferGraphics.fillOval((int)(275*(t/1900)+625),(int)(-10*(thetaAbs)+220),5,5);
+    bufferGraphics.drawString("No buttons available. It'll mess up my dyanmics. Sorry.",300,10);
+
+
+    // g2.fillOval((int)((.05)*xcal+500),(int)((.05)*vel+300),5,5);    
+
+    bufferGraphics.setColor(new Color(0,0,0)); //angle vs time
+    bufferGraphics.drawLine(625,375,900,375);
+    bufferGraphics.drawLine(775,250,775,495);
+    bufferGraphics.drawString("Theta",900,375);
+    bufferGraphics.drawString("Theta Dot",775,250);
+    double thetaD=Math.toDegrees(theta);
+    // System.out.println("theta "+thetaD+" Vnow "+V);
+    bufferGraphics.fillOval((int)(0.25*thetaD+770),(int)(-15*Vph+370),10,10);
+
+
+
+    g2.drawImage(buffer, 0, 0, this);
+    
+  }
+//*****************************************************ACTION EVENT****************
+  // public void actionPerformed(ActionEvent e) { 
+
+  //   //Get new values from textfields
+  //   String newA1 = newA.getText();
+  //   String newLength1 = newLength.getText();
+  //   Double newA2 = Double.parseDouble(newA1);
+  //   Double newLength2 = Double.parseDouble(newLength1);
+
+  //   //new initial values
+  //   Vmh=0.0;
+  //   A=newA2;
+  //   // thetaprev=0.0;
+  //   Ry=(int) Math.round((newLength2/2.0)*Math.sin(theta));
+  //   Rx=(int) Math.round((newLength2/2.0)*Math.cos(theta));
+  //   Ly=(int) Math.round((newLength2/2.0)*Math.sin(theta+pi));
+  //   Lx=(int) Math.round((newLength2/2.0)*Math.cos(theta+pi));
+  //   t=0;
+
+  //   //set new values for repainting
+  //   start();
+
+  // }
+//*****************************************************UPDATE**********************
+  public void update(Graphics g) { paint(g);}
+
+//*******************************************************FUNCTIONS*****************
+  // public double vel(double theta, double vel, double t) {
+  //   return -3*g*(-Math.pow(Rlength,2)*Math.cos(theta)+Math.pow(Llength,2)*Math.sin(pi+theta))/(Math.pow(Llength,3)*Math.pow(Rlength,3))-
+  // 3*(Math.pow(Llength,2)*LBurnrate+Math.pow(Rlength,2)*RBurnrate)*vel/(Math.pow(Llength,3)*Math.pow(Rlength,3));
+  // }
+  // public double Vel(double theta, double v, double t) {
+  //   return 
+  // }
+
+  public double Accel(double Rlength, double Llength, double RBurnate, double LBurnrate, double theta, double vel) {
+    return -(3.0/2.0)*g*(-Math.pow(Rlength,2)*Math.cos(theta)+Math.pow(Llength,2)*Math.sin(pi+theta))/(Math.pow(Llength,3)+Math.pow(Rlength,3))-3*((Math.pow(Llength,2)*LBurnrate+Math.pow(Rlength,2)*RBurnrate)*vel)/(Math.pow(Llength,3)+Math.pow(Rlength,3));
+      
+  }
+
+  public double Vel(double velN,double accN, double dt){
+    return velN+dt*accN;
+  }
+//***********************************************************RUN*******************
+  /** The body of the animation thread */
+  public void run() {
+    while(!please_stop) {
+
+      //Kinematic equations
+       if (Math.abs(theta)>=(2*pi)){
+                theta= theta%(2*pi);
+        }
+
+      LBurnrate=-(A/4.0*Math.cos(theta+pi/2.0)+A/2);
+      RBurnrate=-(A/4.0*Math.cos(theta+3*pi/2.0)+A/2);
+
+      // System.out.println("LB: "+LBurnrate+" RB: "+RBurnrate);
+      //System.out.println("Rlength: "+Rlength+" Llength: "+Llength);
+
+      // RUNGEKUTTA METHOD:***********************************************************
+      // a1=Accel(Rlength, Llength, RBurnrate, LBurnrate,thetaN,Vn);
+      // k1=dt*a1;
+
+      // v1=Vel(Vn,a1,dt);
+      // l1=dt*v1;
+
+      // a2=Accel(Rlength, Llength, RBurnrate, LBurnrate,thetaN+k1/2.0,Vn+l1/2.0);
+      // k2=dt*a2;
+
+      // v2=Vel(Vn+l1/2.0,a2,dt);
+      // l2=dt*v2;
+
+      // a3=Accel(Rlength, Llength, RBurnrate, LBurnrate,thetaN+k2/2.0,Vn+l2/2.0);
+      // k3=dt*a3;
+
+      // v3=Vel(Vn+l2/2.0,a3,dt);
+      // l3=dt*v3;
+
+      // a4=Accel(Rlength, Llength, RBurnrate, LBurnrate,thetaN,Vn+l3);
+      // k4=dt*a4;
+
+      // v4=Vel(Vn+l3,a3,dt);
+      // l4=dt*v4;
+
+      // thetanp1=thetaN+(1.0/6.0)*(k1+2.0*k2+2.0*k3+k4);
+      // Vnp1=Vn+(1.0/6.0)*(l1+2.0*l2+2.0*l3+l4);
+
+      // System.out.println("v1 "+v1+" v2 "+v2+" v3 "+v3+" v4 "+v4);
+      // System.out.println("a1 "+a1+" a2 "+a2+" a3 "+a3+" a4 "+a4);
+
+      // System.out.println("k1 "+k1+" k2 "+k2+" k3 "+k3+" k4"+k4);
+
+      // System.out.println("l1 "+l1+" l2 "+l2+" l3 "+l3+" l4"+l4);
+
+      // // Vnext=Vn+(1/6)*(k1+2*k2+2*k3+k4);
+
+      // System.out.println("Theta "+thetaN+" Vnext "+Vnp1+ " Vn "+Vn);
+     
+      // // thetanp1=thetaNow+(1/6)*(l1+2*l2+2*l3+l4);
+      // // thetaNow=thetanp1;
+      // thetaN=thetanp1;
+      // Vn=Vnext;
+
+      // Ry=(int) Math.round(Rlength*Math.sin(thetaN));
+      // Ly=(int) Math.round(Llength*Math.sin(thetaN+pi));
+      // Lx=(int) Math.round(Llength*Math.cos(thetaN+pi));
+      // Rx=(int) Math.round(Rlength*Math.cos(thetaN));
+
+      // // System.out.println("Theta: "+thetaNow+" ThetaNext: "+thetanp1+" dt "+dt);
+
+
+      //LEAPFROG METHOD:****************************************************************
+
+      aNow1=-(3.0/2.0)*g*(-Math.pow(Rlength,2)*Math.cos(theta)+Math.pow(Llength,2)*Math.sin(pi/2+theta))/(Math.pow(Llength,3)+Math.pow(Rlength,3))-3*((Math.pow(Llength,2)*LBurnrate+Math.pow(Rlength,2)*RBurnrate)*Vmh)/(Math.pow(Llength,3)+Math.pow(Rlength,3));
+
+      VStarph=Vmh+dt*aNow1;
+      thetaStarNext=theta+VStarph*dt;
+      double Vnow=(thetaStarNext-thetaprev)/(2*dt);
+      // System.out.println("Vnow "+Vnow);
+
+      aNow2=-(3.0/2.0)*g*(-Math.pow(Rlength,2)*Math.cos(theta)+Math.pow(Llength,2)*Math.sin(pi+theta))/(Math.pow(Llength,3)+Math.pow(Rlength,3))-3*(Math.pow(Llength,2)*LBurnrate+Math.pow(Rlength,2)*RBurnrate)*Vnow/(Math.pow(Llength,3)+Math.pow(Rlength,3));
+
+      Vph=Vmh+dt*aNow2;
+
+      double thetaD2=Math.toDegrees(theta);
+      System.out.println("theta "+thetaD2+" Vnow "+Vnow+" Vmh "+Vmh+" Vph "+Vph+" aNow1 "+aNow1+" aNow2 "+aNow2);
+      thetaNext=theta+dt*Vph;
+      t=t+dt;
+      Vnow=Vnext;
+      theta=thetaNext;
+      Ry=(int) Math.round(Rlength*Math.sin(thetaNext));
+      Ly=(int) Math.round(Llength*Math.sin(thetaNext+pi));
+      Lx=(int) Math.round(Llength*Math.cos(thetaNext+pi));
+      Rx=(int) Math.round(Rlength*Math.cos(thetaNext));
+
+      if (Llength <20 || Rlength <20){
+        please_stop=true;
+        bufferGraphics.setColor(new Color(0,0,255));
+        // public void setFont()
+        System.out.println("REPLACE THE CANDLES!!");
+      }
+
+      //Rename the variables for the next round
+
+      
+      Vmh=Vph;
+      Vnow=Vph;
+      System.out.println("theta "+theta);
+      thetaprev=theta;
+      theta=thetaprev;
+//******************************************************************************************************
+
+      Llength=Llength+dt*LBurnrate;
+      Rlength=Rlength+dt*RBurnrate;
+
+      repaint();
+
+      try{
+      Thread.sleep(15);
+      } catch (InterruptedException e) { ; }
+    }
+    animator = null;
+  }
+//*************************************************************START***************
+  /** Start the animation thread */
+  public void start() {
+    if (animator == null) {
+      please_stop = false;
+      animator = new Thread(this);
+      animator.start();
+    }
+  }
+
+//***********************************************************STOP******************
+  /** Stop the animation thread */
+  public void stop() { please_stop = true; }
+
+  //**********************************************************CLICK****************
+
+  /** Allow the user to start and stop the animation by clicking */
+  public boolean mouseDown(Event e, int x, int y) {
+    if (animator != null) please_stop = true;  // if running request a stop
+    else start();                              // otherwise start it.
+    return true;
+  }
+}
