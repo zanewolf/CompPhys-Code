@@ -1,11 +1,9 @@
 # Example-Code
 Code created for Course Projects 
 
-This was when I first started to learn how to code, and it was my first time ever coding in java script. Please forgive me for my (many) sins. 
+This was when I first started to seriously code (four years after the matlab class), and it was my first time ever coding in javascript. Please forgive me for my (many) sins. Not all the codes work. Load them, sometimes funny things will happen. Or don't, because javascript sucks. 
 
-Some code was compiled for the courses and then students adapted it to suit the homework assignment. 
-Some is completely original.
-Most of it works correctly. 
+
 
 
 
